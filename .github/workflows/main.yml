@@ -31,9 +31,11 @@ jobs:
           node-version: 20 # Optional; defaults to 16
 
       - name: Zip Folder
+        env:
+          REPO_NAME: ${{ github.event.repository.name }}
         run: |
          cd dist-archive
-         zip -r ../divi-barrierefrei.zip .
+         zip -r ../${REPO_NAME}.zip .
 
       - name: Remove Release
         uses: nikhilbadyal/ghaction-rm-releases@v0.0.5
@@ -48,7 +50,7 @@ jobs:
           name: latest
           tag_name: latest
           prerelease: true
-          files: divi-barrierefrei.zip
+          files: ${{ github.event.repository.name }}.zip
           make_latest: true
 
       - name: Move Stuff back
