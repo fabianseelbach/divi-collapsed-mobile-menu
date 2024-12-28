@@ -1,0 +1,13 @@
+{
+	"name" : "Divi Collapsed Menu on Mobile",
+	"slug" : "divi-collapsed-mobile-menu",
+	"author" : "Fabian Seelbach",
+	"version" : "1.0.0",
+	"download_url" : "https://github.com/fabianseelbach/divi-collapsed-mobile-menu/releases/download/latest/divi-collapsed-mobile-menu.zip",
+	"requires" : "5.6",
+	"tested" : "6.7.1",
+	"requires_php" : "5.6",
+	"added" : "2024-12-28 10:00:00",
+	"last_updated" : "2024-12-28 10:00:00",
+	"homepage" : "https://github.com/fabianseelbach/divi-collapsed-mobile-menu"
+}

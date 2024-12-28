@@ -1,0 +1,23 @@
+.et_mobile_menu .first-level > a {
+	background-color: transparent;
+	position: relative;
+}
+.et_mobile_menu .first-level > a:after {
+	font-family: 'ETmodules';
+	content: '+';
+	font-weight: normal;
+	position: absolute;
+	font-size: 16px;
+	top: 13px;
+	right: 10px;
+}
+.et_mobile_menu .first-level > .icon-switch:after{
+	content: '\4d';
+}
+
+.second-level {
+	display: none;
+}
+.reveal-items {
+	display: block;
+}

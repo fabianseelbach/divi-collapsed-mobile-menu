@@ -1,0 +1,82 @@
+name: Build release zip
+permissions:
+  contents: write
+on:
+  push:
+    branches:
+    - production
+
+jobs:
+  build:
+    name: Build release zip
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout latest code
+        uses: actions/checkout@v4
+
+      - name: Cleanup
+        run: |
+          rm -rf .git
+          rm .gitignore 
+          rm -rf .github
+          rm README.md
+          mv index.json /home/runner
+
+      - name: Generating zip
+        uses: rudlinkon/action-wordpress-build-zip@1.3.0
+        with:
+          retention-days: 1 # Optional; defaults to 3
+          install-composer: true # Optional; defaults to false
+          npm-run-build: true # Optional; defaults to false
+          node-version: 20 # Optional; defaults to 16
+
+      - name: Zip Folder
+        run: |
+         cd dist-archive
+         zip -r ../divi-barrierefrei.zip .
+
+      - name: Remove Release
+        uses: nikhilbadyal/ghaction-rm-releases@v0.0.5
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_PATTERN: 'latest'
+
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: latest
+          tag_name: latest
+          prerelease: true
+          files: divi-barrierefrei.zip
+          make_latest: true
+
+      - name: Move Stuff back
+        run: |
+          mkdir github-pages
+          mv /home/runner/index.json github-pages
+
+      - name: Upload index.json as artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
+        with:
+          path: github-pages/
+
+  deploy:
+    needs: build
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    # Specify runner + deployment step
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 # or specific "vX.X.X" version tag for this action
